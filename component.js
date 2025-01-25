@@ -6,7 +6,7 @@ const ChatBox = ({ sendMessage }) => {
   const handleSendMessage = () => {
     if (input.trim()) {
       sendMessage(input);
-      setInput("");
+      setInput("Hi, how can i help you..");
     }
   };
 
