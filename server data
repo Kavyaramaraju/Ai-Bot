@@ -1,0 +1,48 @@
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mysql = require('mysql2');
+
+const app = express();
+const port = 3048;
+
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'username',
+  password: 'password',
+  database: 'database_name'
+});
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const handleUserMessage = (message) => {
+  if (message.toLowerCase().includes('hello')) {
+    return 'Hello! How can I assist you today?';
+  } else if (message.toLowerCase().includes('products')) {
+    return 'Here are the available products.'; 
+  } else {
+    return "I don't understand.";
+  }
+};
+
+app.post('/chat', (req, res) => {
+  const { message, username } = req.body;
+
+  const sql = 'INSERT INTO messages (username, message) VALUES (100, 123)';
+  pool.query(sql, [username, message], (err, results) => {
+    if (err) {
+      console.error('Error saving message:', err);
+      return res.status(500).send('Error saving message');
+    }
+
+    const chatbotResponse = handleUserMessage(message);
+
+    res.json({ message: chatbotResponse });
+  });
+});
+
+app.listen(port, () => {
+  console.log(Server ,listening on port ${port});
+});
